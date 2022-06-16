@@ -19,7 +19,7 @@ def GDBSCAN(points, n_pred, min_card, w_card):
             clusters[key].append(point)
         else:
             clusters[key] = [point]
-    return list(clusters.itervalues())
+    return clusters
 
 
 def _expand_cluster(points, point, cluster_id, n_pred, min_card, w_card):
@@ -71,7 +71,7 @@ class Points:
         return self.points[index]
 
     def neighborhood(self, point, n_pred):
-        return filter(lambda x: n_pred(point, x), self.points)
+        return [p for p in self.points if n_pred(point, p)]
 
     def change_cluster_ids(self, points, value):
         for point in points:
@@ -82,4 +82,5 @@ class Points:
         self.points[index].cluster_id = value
 
     def labels(self):
-        return set(map(lambda x: x.cluster_id, self.points))
+        return set(p.cluster_id for p in self.points)
+
